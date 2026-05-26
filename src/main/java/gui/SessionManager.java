@@ -61,23 +61,6 @@ public class SessionManager {
     }
 
     /**
-     * Метод для загрузки общих свойств
-     */
-    private void loadCommonState(Component component, Map<String, String> view){
-        try {
-            String x = view.get("x");
-            String y = view.get("y");
-            String w = view.get("width");
-            String h = view.get("height");
-
-            if (x != null && y != null && w != null && h != null) {
-                component.setBounds(Integer.parseInt(x), Integer.parseInt(y),
-                        Integer.parseInt(w), Integer.parseInt(h));
-            }
-        } catch (NumberFormatException e){}
-    }
-
-    /**
      * Загружает и применяет состояние главного и всех внутренних окон из файла
      */
     public void loadAll(Saveble mainFrame, JInternalFrame[] internalFrames) {

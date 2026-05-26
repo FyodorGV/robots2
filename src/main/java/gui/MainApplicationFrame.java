@@ -13,6 +13,7 @@ public class MainApplicationFrame extends JFrame implements Saveble
     private final JDesktopPane desktopPane = new JDesktopPane();
     private LogWindow logWindow;
     private GameWindow gameWindow;
+    private RobotInfoWindow infoWindow;
     private final SessionManager storage = new SessionManager("grebennikov");
     
     public MainApplicationFrame() {
@@ -31,6 +32,11 @@ public class MainApplicationFrame extends JFrame implements Saveble
         gameWindow = new GameWindow();
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
+
+        infoWindow = new RobotInfoWindow(gameWindow.getModel());
+        infoWindow.setSize(250, 180);
+        infoWindow.setLocation(420, 10);
+        addWindow(infoWindow);
 
         setJMenuBar(generateMenuBar());
         loadAllStates();
@@ -80,7 +86,9 @@ public class MainApplicationFrame extends JFrame implements Saveble
         }
     }
 
-    
+    /**
+     * Создает окно лога
+     */
     protected LogWindow createLogWindow()
     {
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());

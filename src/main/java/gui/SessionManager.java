@@ -85,7 +85,9 @@ public class SessionManager {
         }
     }
 
-    // Универсальный метод-помощник для загрузки
+    /** Универсальный метод-помощник для загрузки
+     *
+     */
     private void loadWindowState(Component component, Saveble saveable, Map<String, String> allData){
         Map<String, String> view = new PrefixedMap(allData, saveable.getPrefix());
         try {

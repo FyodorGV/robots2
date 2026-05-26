@@ -2,8 +2,9 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
-public class GameWindow extends JInternalFrame
+public class GameWindow extends JInternalFrame implements Saveble
 {
     private final GameVisualizer gameVisualizer;
 
@@ -15,5 +16,10 @@ public class GameWindow extends JInternalFrame
         panel.add(gameVisualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
         pack();
+    }
+
+    @Override
+    public String getPrefix() {
+        return "game";
     }
 }

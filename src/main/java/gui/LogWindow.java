@@ -3,11 +3,11 @@ package gui;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
-
+import java.util.Map;
 import javax.swing.*;
 import java.awt.*;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener
+public class LogWindow extends JInternalFrame implements LogChangeListener, Saveble
 {
     private LogWindowSource logSource;
     private TextArea logContent;
@@ -42,5 +42,10 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
     public void onLogChanged()
     {
         EventQueue.invokeLater(this::updateLogContent);
+    }
+
+    @Override
+    public String getPrefix() {
+        return "log";
     }
 }

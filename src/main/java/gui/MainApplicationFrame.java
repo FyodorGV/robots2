@@ -8,9 +8,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class MainApplicationFrame extends JFrame
+public class MainApplicationFrame extends JFrame implements Saveble
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    private LogWindow logWindow;
+    private GameWindow gameWindow;
+    private final SessionManager storage = new SessionManager("grebennikov");
     
     public MainApplicationFrame() {
         int inset = 50;        
@@ -22,14 +25,15 @@ public class MainApplicationFrame extends JFrame
         setContentPane(desktopPane);
         
         
-        LogWindow logWindow = createLogWindow();
+        logWindow = createLogWindow();
         addWindow(logWindow);
 
-        GameWindow gameWindow = new GameWindow();
+        gameWindow = new GameWindow();
         gameWindow.setSize(400,  400);
         addWindow(gameWindow);
 
         setJMenuBar(generateMenuBar());
+        loadAllStates();
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         addWindowListener(new WindowAdapter() {
@@ -39,6 +43,23 @@ public class MainApplicationFrame extends JFrame
             }
         });
     }
+
+    /**
+     * Загружает состояние всех окон из файла
+     */
+    private void loadAllStates() {
+        storage.loadAll(this, desktopPane.getAllFrames());
+    }
+
+    /**
+     * Сохраняет состояние всех окон в файл
+     */
+    private void saveAllStates() {
+        storage.saveAll(this, desktopPane.getAllFrames());
+    }
+    /**
+     * Показывает диалог подтверждения выхода
+     */
     private void showExitConfirmation() {
         String[] options = {"Да", "Нет"};
         int result = JOptionPane.showOptionDialog(
@@ -52,7 +73,8 @@ public class MainApplicationFrame extends JFrame
                 options[1]
         );
 
-        if (result == JOptionPane.OK_OPTION) {
+        if (result == JOptionPane.YES_OPTION) {
+            saveAllStates();
             dispose();
             System.exit(0);
         }
@@ -64,12 +86,14 @@ public class MainApplicationFrame extends JFrame
         LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource());
         logWindow.setLocation(10,10);
         logWindow.setSize(300, 800);
-        setMinimumSize(logWindow.getSize());
         logWindow.pack();
         Logger.debug("Протокол работает");
         return logWindow;
     }
-    
+
+    /**
+     * Добавляет внутреннее окно на главное окно
+     */
     protected void addWindow(JInternalFrame frame)
     {
         desktopPane.add(frame);
@@ -169,17 +193,22 @@ public class MainApplicationFrame extends JFrame
         return crossplatformLookAndFeel;
     }
 
-
-    private void setLookAndFeel(String className)
-    {
-        try
-        {
+    /**
+     * Устанавливает настройки LookAndFeel
+     */
+    private void setLookAndFeel(String className) {
+        try {
             UIManager.setLookAndFeel(className);
             SwingUtilities.updateComponentTreeUI(this);
-        }
-        catch (ClassNotFoundException | InstantiationException
-            | IllegalAccessException | UnsupportedLookAndFeelException e)
-        {
+        } catch (ClassNotFoundException | InstantiationException
+                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
+            // just ignore
         }
     }
+
+    @Override
+    public String getPrefix() {
+        return "main";
+    }
+
 }

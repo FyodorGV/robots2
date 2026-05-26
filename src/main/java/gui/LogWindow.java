@@ -3,7 +3,6 @@ package gui;
 import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
-import java.util.Map;
 import javax.swing.*;
 import java.awt.*;
 
